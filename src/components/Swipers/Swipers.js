@@ -3,7 +3,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination, Thumbs, Controller } from "swiper";
 import "swiper/swiper-bundle.css";
 import "./Swipers.scss";
-import api_data from "./data.json"
 
 SwiperCore.use([Navigation, Pagination, Thumbs, Controller]);
 
@@ -17,8 +16,15 @@ export default function ReactSwipers() {
     loadData()
   });
 
-  const loadData = () => {
-    setData(api_data)
+  const loadData = async () => {
+    let response = await fetch('https://jsonplaceholder.typicode.com/photos');
+
+    if (response.ok) {
+      let json = await response.json();
+      setData(json.slice(0, 6))
+    } else {
+      alert("HTTP-Error: " + response.status);
+    }
   };
 
   const thumbnailClick = (item) => {
